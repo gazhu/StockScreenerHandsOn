@@ -5,12 +5,12 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
 
 
-@Service
+@Component
 public class LandingPageDao {
 
 	PreparedStatement pst;
@@ -58,7 +58,6 @@ public class LandingPageDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return list;
 	}
 

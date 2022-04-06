@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ey.wamacademy.capstoneapi.dao.LandingPageDao;
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
+import com.ey.wamacademy.capstoneapi.services.LandingPageService;
 
 
 
@@ -15,11 +15,11 @@ import com.ey.wamacademy.capstoneapi.model.LandingPage;
 public class MainController {
 
 	@Autowired
-	private LandingPageDao dao;
+	private LandingPageService service;
 	
 	@GetMapping("viewall")
 	public List<LandingPage> viewAll() {
-		return dao.viewAll();
+		return service.fetchAllData();
 	}
 	
 }

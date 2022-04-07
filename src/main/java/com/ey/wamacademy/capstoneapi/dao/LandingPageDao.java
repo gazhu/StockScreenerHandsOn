@@ -2,6 +2,7 @@ package com.ey.wamacademy.capstoneapi.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class LandingPageDao {
 
 	PreparedStatement pst;
 	ResultSet rs;
+	String selectQuery = "select * from landingtable";
 
 	public List<LandingPage> viewAll() {
 
@@ -22,7 +24,7 @@ public class LandingPageDao {
 		
 		
 		try {
-			pst = DbConnection.getObject().getConnection().prepareStatement("select * from landingtable");
+			pst = DbConnection.getObject().getConnection().prepareStatement(selectQuery);
 			rs = pst.executeQuery();
 
 			while (rs.next()) {
@@ -59,6 +61,23 @@ public class LandingPageDao {
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+	public int getColumnCount()
+	{
+		int columnCount = 0;
+		try {
+			pst = DbConnection.getObject().getConnection().prepareStatement(selectQuery);
+			rs = pst.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			columnCount = rsmd.getColumnCount();
+			}
+		 catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return columnCount;
+		
 	}
 
 }

@@ -28,6 +28,43 @@ public class LandingPage {
 	private String industryName;
 	private String instrumentType;
 
+	public LandingPage(String date, String ric, String instrumentName, String currency, String isin, String sedol,
+			String tickerSymbol, double openPrice, double closePrice, double highPrice, double lowPrice,
+			int dailyTradedVolumne, double weekReturn, double monthReturn, double yearReturn,
+			long companyMarketCapitalization, double beta, double revenue, double earningsPerShare, double pe,
+			String countryOfExchange, String exchangeName, String sectorName, String industryName,
+			String instrumentType) {
+
+		this.date = date;
+		this.ric = ric;
+		this.instrumentName = instrumentName;
+		this.currency = currency;
+		this.isin = isin;
+		this.sedol = sedol;
+		this.tickerSymbol = tickerSymbol;
+		this.openPrice = openPrice;
+		this.closePrice = closePrice;
+		this.highPrice = highPrice;
+		this.lowPrice = lowPrice;
+		this.dailyTradedVolumne = dailyTradedVolumne;
+		this.weekReturn = weekReturn;
+		this.monthReturn = monthReturn;
+		this.yearReturn = yearReturn;
+		this.companyMarketCapitalization = companyMarketCapitalization;
+		this.beta = beta;
+		this.revenue = revenue;
+		this.earningsPerShare = earningsPerShare;
+		this.pe = pe;
+		this.countryOfExchange = countryOfExchange;
+		this.exchangeName = exchangeName;
+		this.sectorName = sectorName;
+		this.industryName = industryName;
+		this.instrumentType = instrumentType;
+	}
+
+	public LandingPage() {
+
+	}
 
 	public String getDate() {
 		return date;

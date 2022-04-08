@@ -6,6 +6,8 @@ import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
@@ -13,6 +15,7 @@ import com.ey.wamacademy.capstoneapi.model.LandingPage;
 @Component
 public class LandingPageDao {
 
+	Logger daologger = LoggerFactory.getLogger(LandingPageDao.class);
 	PreparedStatement pst;
 	ResultSet rs;
 	String selectQuery = "select * from landingtable";
@@ -56,7 +59,7 @@ public class LandingPageDao {
 				list.add(landingPage);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			daologger.debug("Error occured in viewAll function " + e);
 		}
 		return list;
 	}
@@ -69,7 +72,7 @@ public class LandingPageDao {
 			ResultSetMetaData rsmd = rs.getMetaData();
 			columnCount = rsmd.getColumnCount();
 		} catch (Exception e) {
-			e.printStackTrace();
+			daologger.debug("Error occured in getColumnCount function " + e);
 		}
 
 		return columnCount;
@@ -110,7 +113,7 @@ public class LandingPageDao {
 				landingPage.setInstrumentType(rs.getString(25));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			daologger.debug("Error occured in searchByID function " + e);
 		}
 		return landingPage;
 	}

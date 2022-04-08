@@ -3,21 +3,20 @@ package com.ey.wamacademy.capstoneapi.dao;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
 import com.ey.wamacademy.capstoneapi.services.LandingPageService;
 
+// Class for testing LandingPageDao class
 @SpringBootTest
 class LandingPageDaoTests {
 
+	// Creating records for testing viewAll method of LandingPageDao class
 	@SuppressWarnings("serial")
 	List<LandingPage> records = new ArrayList<LandingPage>() {
 		{
@@ -35,21 +34,28 @@ class LandingPageDaoTests {
 	@Autowired
 	private LandingPageService landingPageService;
 
+	// Mock object of LandingPageDao class
 	@MockBean
 	private LandingPageDao landingPageDao;
 
+	// Method for testing that empty result is not returned by viewAll method
 	@Test
 	void viewAllTest() {
 		when(landingPageDao.viewAll()).thenReturn(records);
 		assertThat(landingPageService.fetchAllData().size()).isGreaterThan(0);
 	}
 
+	// Method for verifying column count for fetched data
 	@Test
 	void columnCountTest() {
 		when(landingPageDao.getColumnCount()).thenReturn(25);
 		assertEquals(25, landingPageDao.getColumnCount());
 	}
 
+	/*
+	 * Method for verifying right record is returned when searching by ISIN using
+	 * searchByID method
+	 */
 	@Test
 	void searchByIdTest() {
 		LandingPage actualValue = new LandingPage("30 March 2022", "/BAM",
@@ -62,11 +68,12 @@ class LandingPageDaoTests {
 		assertThat(actualValue).usingRecursiveComparison().isEqualTo(expectedValue);
 	}
 
+	// Method for verifying number of records fetched when viewAll method is called
 	@Test
 	void viewAllTestCount() {
 
 		when(landingPageDao.viewAll()).thenReturn(records);
-		assertEquals(2,landingPageService.fetchAllData().size());
+		assertEquals(2, landingPageService.fetchAllData().size());
 	}
 
 }

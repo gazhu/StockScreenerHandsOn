@@ -2,27 +2,27 @@ package com.ey.wamacademy.capstoneapi.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
 import com.ey.wamacademy.capstoneapi.services.LandingPageService;
 
+// Class for testing MainController class
 @SpringBootTest
 class MainControllerTest {
 
 	@Autowired
 	private MainController con;
 
+	// Creating mock object for LandingPageService class
 	@MockBean
 	private LandingPageService landingPageService;
 
+	// Creating records for testing viewAll method of LandingPageService class
 	@SuppressWarnings("serial")
 	List<LandingPage> records = new ArrayList<LandingPage>() {
 		{
@@ -37,6 +37,7 @@ class MainControllerTest {
 		}
 	};
 
+	// Testing viewAll by verifying the number of records fetched
 	@Test
 	void viewAllTest() {
 

@@ -1,5 +1,6 @@
 package com.ey.wamacademy.capstoneapi.model;
 
+// Model class for LandingPage
 public class LandingPage {
 
 	private String date;
@@ -28,6 +29,7 @@ public class LandingPage {
 	private String industryName;
 	private String instrumentType;
 
+	// Parameterized constructor
 	public LandingPage(String date, String ric, String instrumentName, String currency, String isin, String sedol,
 			String tickerSymbol, double openPrice, double closePrice, double highPrice, double lowPrice,
 			int dailyTradedVolumne, double weekReturn, double monthReturn, double yearReturn,
@@ -62,6 +64,7 @@ public class LandingPage {
 		this.instrumentType = instrumentType;
 	}
 
+	// Unparameterized constructor
 	public LandingPage() {
 
 	}

@@ -5,13 +5,12 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
 
+// LandingPageDao includes the methods that perform business logics and return data to LandingPageService class 
 @Component
 public class LandingPageDao {
 
@@ -20,11 +19,14 @@ public class LandingPageDao {
 	ResultSet rs;
 	String selectQuery = "select * from landingtable";
 
+	// Fetches all the records from the landing table and returns list to
+	// LandingPageService
 	public List<LandingPage> viewAll() {
 
 		List<LandingPage> list = new ArrayList<LandingPage>();
 
 		try {
+			// establishing MySql connections
 			pst = DbConnection.getObject().getConnection().prepareStatement(selectQuery);
 			rs = pst.executeQuery();
 
@@ -64,6 +66,7 @@ public class LandingPageDao {
 		return list;
 	}
 
+	// Returns column count of the fetched data
 	public int getColumnCount() {
 		int columnCount = 0;
 		try {
@@ -79,6 +82,7 @@ public class LandingPageDao {
 
 	}
 
+	// Searches record by ISIN , was implemented for testing
 	public LandingPage searchById(String isinCheck) {
 		LandingPage landingPage = new LandingPage();
 		try {

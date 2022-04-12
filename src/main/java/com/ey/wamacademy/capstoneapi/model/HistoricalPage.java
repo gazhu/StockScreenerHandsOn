@@ -1,7 +1,7 @@
 package com.ey.wamacademy.capstoneapi.model;
 
-// Model class for LandingPage
-public class LandingPage {
+//Model class for Historical Page
+public class HistoricalPage {
 
 	private int stockId;
 	private String date;
@@ -31,8 +31,8 @@ public class LandingPage {
 	private String instrumentType;
 
 	// Parameterized constructor
-	public LandingPage(int stockId, String date, String ric, String instrumentName, String currency, String isin,
-			String sedol, String tickerSymbol, double openPrice, double closePrice, double highPrice, double lowPrice,
+	public HistoricalPage(int stockId,String date, String ric, String instrumentName, String currency, String isin, String sedol,
+			String tickerSymbol, double openPrice, double closePrice, double highPrice, double lowPrice,
 			int dailyTradedVolumne, double weekReturn, double monthReturn, double yearReturn,
 			long companyMarketCapitalization, double beta, double revenue, double earningsPerShare, double pe,
 			String countryOfExchange, String exchangeName, String sectorName, String industryName,
@@ -67,7 +67,7 @@ public class LandingPage {
 	}
 
 	// Unparameterized constructor
-	public LandingPage() {
+	public HistoricalPage() {
 
 	}
 

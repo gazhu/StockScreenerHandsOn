@@ -13,23 +13,31 @@ public class DbConnection {
 	private DbConnection() {
 
 	}
-
-	// public method to provide class instance
+	
+	/**
+	 * public method to provide class instance
+	 *
+	 * @return class instance
+	 */
 	public static DbConnection getObject() {
 
 		return db;
 	}
 
-	// return connection object after establishing connection with database
+	/**
+	 * for establishing connection with database
+	 *
+	 * @return Connection object
+	 */
 	public Connection getConnection() {
 		Connection con = null;
 		try {
-			
+
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/stockscreener", "root", "87654321");
 
 		} catch (SQLException | ClassNotFoundException e) {
-			
+
 			e.printStackTrace();
 		}
 

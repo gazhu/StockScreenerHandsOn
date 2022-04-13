@@ -29,6 +29,8 @@ public class LandingPage {
 	private String sectorName;
 	private String industryName;
 	private String instrumentType;
+	private double dailyReturns;
+
 
 	// Parameterized constructor
 	public LandingPage(int stockId, String date, String ric, String instrumentName, String currency, String isin,
@@ -36,7 +38,7 @@ public class LandingPage {
 			int dailyTradedVolumne, double weekReturn, double monthReturn, double yearReturn,
 			long companyMarketCapitalization, double beta, double revenue, double earningsPerShare, double pe,
 			String countryOfExchange, String exchangeName, String sectorName, String industryName,
-			String instrumentType) {
+			String instrumentType,double dailyReturns) {
 
 		this.stockId = stockId;
 		this.date = date;
@@ -64,6 +66,7 @@ public class LandingPage {
 		this.sectorName = sectorName;
 		this.industryName = industryName;
 		this.instrumentType = instrumentType;
+		this.dailyReturns = dailyReturns;
 	}
 
 	// Unparameterized constructor
@@ -279,5 +282,13 @@ public class LandingPage {
 	public void setInstrumentType(String instrumentType) {
 		this.instrumentType = instrumentType;
 	}
+	public double getDailyReturns() {
+		return dailyReturns;
+	}
+
+	public void setDailyReturns(double dailyReturns) {
+		this.dailyReturns = dailyReturns;
+	}
+
 
 }

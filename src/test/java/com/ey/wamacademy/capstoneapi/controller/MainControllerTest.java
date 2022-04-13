@@ -3,6 +3,7 @@ package com.ey.wamacademy.capstoneapi.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import com.ey.wamacademy.capstoneapi.services.LandingPageService;
 class MainControllerTest {
 
 	@Autowired
-	private MainController con;
+	private MainController controller;
 
 	// Creating mock object for LandingPageService class
 	@MockBean
@@ -29,13 +30,20 @@ class MainControllerTest {
 			add(new LandingPage(1, "30 March 2022", "/BAM", "Brookfield Asset Management Ord Shs Class A", "USD",
 					"CA1125851040", "2092555", "BAM", 57.86, 57.61, 58.35, 57.38, 859012, 3.857941229, 5.435578331,
 					31.64220584, 94368982323L, 1.294516689, 16023304.64, 2.3963, 23.87484459,
-					"United States of America", "NYSE", "Financials", "Capital Markets", "Ordinary Shares"));
+					"United States of America", "NYSE", "Financials", "Capital Markets", "Ordinary Shares",1.2));
 			add(new LandingPage(2, "31 March 2022", "/CAN", "Brookfield Asset Management Ord Shs Class A", "USD",
 					"CA1125851040", "2092666", "BAM", 57.86, 57.61, 58.35, 57.38, 859012, 3.857941229, 5.435578331,
 					31.64220584, 94368982323L, 1.294516689, 16023304.64, 2.3963, 23.87484459,
-					"United States of America", "NYSE", "Financials", "Capital Markets", "Ordinary Shares"));
+					"United States of America", "NYSE", "Financials", "Capital Markets", "Ordinary Shares",1.2));
 		}
 	};
+
+	// Creating lists for testing getUniqueExchanges ,getUniqueInstruments,
+	// getUniqueCountries for testing MainController class
+	List<String> countries = Arrays.asList("United States of America", "Belgium", "Australia", "Canada","India","China");
+	List<String> exchanges = Arrays.asList("NYSE", "TSX", "NASDAQ", "SSE");
+	List<String> instruments = Arrays.asList("Brookfield Asset Management Ord Shs Class A", "CME Group Ord Shs Class A",
+			"UBS Group Ord Shs", "Moody's Ord Shs","BSE Ord Shs");
 
 	/**
 	 * Testing viewAll by verifying the number of records fetched
@@ -44,8 +52,31 @@ class MainControllerTest {
 	void viewAllTest() {
 
 		when(landingPageService.fetchAllData()).thenReturn(records);
-		assertEquals(2, con.viewAll().size());
+		assertEquals(2, controller.viewAll().size());
 
 	}
+	
+	@Test
+	void getUniqueExchangesTest()
+	{
+		when(landingPageService.uniqueExchanges()).thenReturn(exchanges);
+		assertEquals(4, controller.getUniqueExchanges().size());
+	}
+	
+	@Test
+	void getUniqueCountriesTest()
+	{
+		when(landingPageService.uniqueCountries()).thenReturn(countries);
+		assertEquals(6, controller.getUniqueCountries().size());
+	}
+	
+	@Test
+	void getUniqueInstrumentsTest()
+	{
+		when(landingPageService.uniqueInstruments()).thenReturn(instruments);
+		assertEquals(5, controller.getUniqueInstruments().size());
+	}
+	
+	
 
 }

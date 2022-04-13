@@ -56,7 +56,7 @@ class LandingPageDaoTests {
 	};
 
 	@SuppressWarnings("serial")
-	List<String> uniqueInstruments = new ArrayList<String>() {
+	List<String> uniqueIdustries = new ArrayList<String>() {
 		{
 			add("Brookfield Asset Management Ord Shs Class A");
 			add("CME Group Ord Shs Class A");
@@ -134,8 +134,8 @@ class LandingPageDaoTests {
 
 	@Test
 	void getUniqueInstrumentNamesTest() {
-		when(landingPageDao.getUniqueInstrumentNames()).thenReturn(uniqueInstruments);
-		List<String> actual = landingPageService.uniqueInstruments();
+		when(landingPageDao.getUniqueIndustryNames()).thenReturn(uniqueIdustries);
+		List<String> actual = landingPageService.uniqueIndustries();
 		List<String> expected = Arrays.asList("Brookfield Asset Management Ord Shs Class A",
 				"CME Group Ord Shs Class A", "UBS Group Ord Shs", "Moody's Ord Shs");
 		assertTrue(actual.size() == expected.size() && actual.containsAll(expected) && expected.containsAll(actual));

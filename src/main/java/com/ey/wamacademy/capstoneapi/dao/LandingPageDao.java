@@ -151,10 +151,14 @@ public class LandingPageDao {
 		return landingPage;
 	}
 
-	// --------------------------------------Story 2
-	// ------------------------------------
-
-	// case 1 method when one parameter is selected
+	/**
+	 * prepares dynamic query based on single parameter
+	 *
+	 * @param paramter, String of selections for parameter
+	 * @Param column, column name which will act as parameter
+	 * 
+	 * @return prepared statement including parameter and column
+	 */
 	private PreparedStatement searchByOneParameter(String parameter, String column) throws SQLException {
 
 		String temp[] = parameter.split(",");
@@ -181,7 +185,16 @@ public class LandingPageDao {
 		return preparedStatement;
 	}
 
-	// case 2 method when two parameters are selected
+	/**
+	 * prepares dynamic query based on two parameters
+	 *
+	 * @param paramter1, String of selections for first parameter
+	 * @param paramter2, String of selections for second parameter
+	 * @Param col1, column name which will act as first parameter
+	 * @Param col2, column name which will act as second parameter
+	 * 
+	 * @return prepared statement including parameters and columns
+	 */
 	private PreparedStatement searchByTwoParameter(String parameter1, String parameter2, String col1, String col2)
 			throws SQLException {
 
@@ -218,7 +231,18 @@ public class LandingPageDao {
 		return preparedStatement;
 	}
 
-	// case 3 method when all parameters are selected
+	/**
+	 * prepares dynamic query based on two parameters
+	 *
+	 * @param paramter1, String of selections for first parameter
+	 * @param paramter2, String of selections for second parameter
+	 * @param paramter3, String of selections for third parameter
+	 * @Param col1, column name which will act as first parameter
+	 * @Param col2, column name which will act as second parameter
+	 * @Param col3, column name which will act as third parameter
+	 * 
+	 * @return prepared statement including parameters and columns
+	 */
 	private PreparedStatement searchByAllParameter(String parameter1, String parameter2, String parameter3, String col1,
 			String col2, String col3) throws SQLException {
 		System.out.println(parameter1);
@@ -270,7 +294,15 @@ public class LandingPageDao {
 		return preparedStatement;
 	}
 
-	// method to check parameters
+	/**
+	 * implements multiple selection drop-down feature
+	 *
+	 * @param industryName, String of comma-separated selections for industry parameter
+	 * @Param country, String of comma-separated selections for country parameter
+	 * @Param exchange, String of comma-separated selections for exchange parameter
+	 * 
+	 * @return list of records based on multiple parameters
+	 */
 	public List<LandingPage> filterByParameters(String industryName, String country, String exchange)
 			throws SQLException {
 
@@ -347,7 +379,13 @@ public class LandingPageDao {
 
 	}
 
-	// method to return the list
+	/**
+	 * prepares dynamic query based on single parameter
+	 *
+	 * @param filterPreparedStatement, dynamic filter query for fetching out the records
+	 * 
+	 * @return list of records according to the applied filters
+	 */
 	private List<LandingPage> viewList(PreparedStatement filterPreparedStatement) {
 		List<LandingPage> list = new ArrayList<LandingPage>();
 		try {
@@ -390,9 +428,12 @@ public class LandingPageDao {
 
 	}
 
-	// -------------------------------------Story
-	// 3-------------------------------------------
-	public List<String> getUniqueInstrumentNames() {
+	/**
+	 * Returns unique industry names in database
+	 *
+	 * @return list of unique industry names
+	 */
+	public List<String> getUniqueIndustryNames() {
 		List<String> list = new ArrayList<String>();
 		try {
 			preparedStatement = DbConnection.getObject().getConnection().prepareStatement(
@@ -401,13 +442,17 @@ public class LandingPageDao {
 			while (resultSet.next()) {
 				list.add(resultSet.getString(1));
 			}
-		} catch (SQLException e) {
-			daologger.debug("Error occured in getUniqueInstrumentNames function " + e);
+		} catch (Exception e) {
+			daologger.debug("Error occured in getIndustryName function " + e);
 		} finally {
 		}
 		return list;
 	}
-
+	/**
+	 * Returns unique exchange names in database
+	 *
+	 * @return list of unique exchange names
+	 */
 	public List<String> getUniqueExchangeNames() {
 		List<String> list = new ArrayList<String>();
 		String query = "select distinct e.exchange_code from stock_details s join exchange_details e on s.exchange_id=e.exchange_id";
@@ -423,6 +468,11 @@ public class LandingPageDao {
 		return list;
 	}
 
+	/**
+	 * Returns unique country names in database
+	 *
+	 * @return list of unique country names
+	 */
 	public List<String> getUniqueCountryNames() {
 		List<String> list = new ArrayList<String>();
 		try {

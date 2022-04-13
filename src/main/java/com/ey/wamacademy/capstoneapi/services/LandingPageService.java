@@ -23,9 +23,12 @@ public class LandingPageService {
 	public List<LandingPage> fetchAllData() {
 		return landingPageDao.viewAll();
 	}
-	
-	
 
+	/**
+	 * method for fetching all records using filtering by parameters
+	 *
+	 * @return list of records based on multiple parameters
+	 */
 	public List<LandingPage> searchByParameters(String industryName, String country, String exchange)
 			throws SQLException {
 		List<LandingPage> list = new ArrayList<LandingPage>();
@@ -38,14 +41,29 @@ public class LandingPageService {
 		return list;
 	}
 
+	/**
+	 * Returns unique exchange names in database
+	 *
+	 * @return list of unique exchange names
+	 */
 	public List<String> uniqueExchanges() {
 		return landingPageDao.getUniqueExchangeNames();
 	}
 
-	public List<String> uniqueInstruments() {
-		return landingPageDao.getUniqueInstrumentNames();
+	/**
+	 * Returns unique industry names in database
+	 *
+	 * @return list of unique industry names
+	 */
+	public List<String> uniqueIndustries() {
+		return landingPageDao.getUniqueIndustryNames();
 	}
 
+	/**
+	 * Returns unique country names in database
+	 *
+	 * @return list of unique country names
+	 */
 	public List<String> uniqueCountries() {
 		return landingPageDao.getUniqueCountryNames();
 	}

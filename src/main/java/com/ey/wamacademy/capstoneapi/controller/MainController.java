@@ -41,7 +41,12 @@ public class MainController {
 		controllerlogger.error("No records found");
 		return records;
 	}
-
+	
+	/**
+	 * handling get request for fetching data according to drop-down multiple selections
+	 *
+	 * @return list of records falling under drop-down selects
+	 */
 	@GetMapping("/view/{industryName}/{country}/{exchange}")
 	public List<LandingPage> findByParameters(@PathVariable String industryName, @PathVariable String country,
 			@PathVariable String exchange) throws SQLException {
@@ -62,7 +67,7 @@ public class MainController {
 	 *
 	 * @return list of all unique exchange names
 	 */
-	@GetMapping("uniquexchanges")
+	@GetMapping("uniqueexchanges")
 	public List<String> getUniqueExchanges() {
 		return service.uniqueExchanges();
 	}
@@ -72,9 +77,9 @@ public class MainController {
 	 *
 	 * @return list of all unique instruments values
 	 */
-	@GetMapping("uniqueinstruments")
-	public List<String> getUniqueInstruments() {
-		return service.uniqueInstruments();
+	@GetMapping("uniqueindustries")
+	public List<String> getUniqueIndustries() {
+		return service.uniqueIndustries();
 	}
 
 	/**

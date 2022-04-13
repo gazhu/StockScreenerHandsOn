@@ -115,7 +115,9 @@ class LandingPageDaoTests {
 		when(landingPageDao.viewAll()).thenReturn(records);
 		assertEquals(2, landingPageService.fetchAllData().size());
 	}
-
+	/**
+	 * Method for verifying unique country values returned by getUniqueCountryNames() method
+	 */
 	@Test
 	void getUniqueCountryNamesTest() {
 		when(landingPageDao.getUniqueCountryNames()).thenReturn(uniqueCountries);
@@ -124,6 +126,9 @@ class LandingPageDaoTests {
 		assertTrue(actual.size() == expected.size() && actual.containsAll(expected) && expected.containsAll(actual));
 	}
 
+	/**
+	 * Method for verifying unique exchange values returned by getUniqueExchangeNames() method
+	 */
 	@Test
 	void getUniqueExchangeNamesTest() {
 		when(landingPageDao.getUniqueExchangeNames()).thenReturn(uniqueExchanges);
@@ -132,8 +137,11 @@ class LandingPageDaoTests {
 		assertTrue(actual.size() == expected.size() && actual.containsAll(expected) && expected.containsAll(actual));
 	}
 
+	/**
+	 * Method for verifying unique industry values returned by getUniqueIndustryNames() method
+	 */
 	@Test
-	void getUniqueInstrumentNamesTest() {
+	void getUniqueIndustryNamesTest() {
 		when(landingPageDao.getUniqueIndustryNames()).thenReturn(uniqueIdustries);
 		List<String> actual = landingPageService.uniqueIndustries();
 		List<String> expected = Arrays.asList("Brookfield Asset Management Ord Shs Class A",

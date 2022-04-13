@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ey.wamacademy.capstoneapi.model.HistoricalPage;
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
 import com.ey.wamacademy.capstoneapi.services.LandingPageService;
 
@@ -90,6 +92,12 @@ public class MainController {
 	@GetMapping("uniquecountries")
 	public List<String> getUniqueCountries() {
 		return service.uniqueCountries();
+	}
+	
+	@GetMapping("/historical/{stock_id}")
+	public List<HistoricalPage> getHistoricalData(@PathVariable int stock_id) throws SQLException
+	{
+		return service.getByStockId(stock_id);
 	}
 
 }

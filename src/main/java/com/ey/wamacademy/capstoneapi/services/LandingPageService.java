@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ey.wamacademy.capstoneapi.dao.LandingPageDao;
+import com.ey.wamacademy.capstoneapi.model.HistoricalPage;
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
 
 // Service class for calling LandingPageDao methods and returning results to controller
@@ -66,6 +67,11 @@ public class LandingPageService {
 	 */
 	public List<String> uniqueCountries() {
 		return landingPageDao.getUniqueCountryNames();
+	}
+	
+	public List<HistoricalPage> getByStockId(int stock_id)
+	{
+		return landingPageDao.historicalRecordByID(stock_id);
 	}
 
 }

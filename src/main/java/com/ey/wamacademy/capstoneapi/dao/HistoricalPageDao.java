@@ -36,10 +36,17 @@ public class HistoricalPageDao {
 	/**
 	 * finds a stock using stock_id and returns its historical data
 	 *
-	 * @return List of records with specific stock_id for each day expect current day
+	 * @return List of records with specific stock_id for each day expect current
+	 *         day
 	 */
 	public List<HistoricalPage> historicalRecordByID(int stock_id) {
+
 		List<HistoricalPage> list = new ArrayList<HistoricalPage>();
+		if (stock_id <= 0) {
+			HistoricalPage emptyHistoricalPageObject = new HistoricalPage();
+			list.add(emptyHistoricalPageObject);
+			return list;
+		}
 		try {
 			preparedStatement = DbConnection.getObject().getConnection()
 					.prepareStatement(selectQuery + " where s.stock_id=? and p.price_effective_date!=\"2022-03-30\"");

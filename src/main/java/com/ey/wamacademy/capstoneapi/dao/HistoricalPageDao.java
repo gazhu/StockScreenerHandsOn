@@ -42,6 +42,7 @@ public class HistoricalPageDao {
 	public List<HistoricalPage> historicalRecordByID(int stock_id) {
 
 		List<HistoricalPage> list = new ArrayList<HistoricalPage>();
+		// return null object if id is less than equal to zero
 		if (stock_id <= 0) {
 			HistoricalPage emptyHistoricalPageObject = new HistoricalPage();
 			list.add(emptyHistoricalPageObject);

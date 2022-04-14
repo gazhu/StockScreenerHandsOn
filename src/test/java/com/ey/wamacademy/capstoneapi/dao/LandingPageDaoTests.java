@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
-import com.ey.wamacademy.capstoneapi.services.LandingPageService;
+import com.ey.wamacademy.capstoneapi.services.Services;
 
 // Class for testing LandingPageDao class
 @SpringBootTest
@@ -66,7 +66,7 @@ class LandingPageDaoTests {
 	};
 
 	@Autowired
-	private LandingPageService landingPageService;
+	private Services landingPageService;
 
 	// Mock object of LandingPageDao class
 	@MockBean

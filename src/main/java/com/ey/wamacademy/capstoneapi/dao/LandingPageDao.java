@@ -6,11 +6,11 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.ey.wamacademy.capstoneapi.model.HistoricalPage;
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
 
 // LandingPageDao includes the methods that perform business logics and return data to LandingPageService class 
@@ -21,6 +21,7 @@ public class LandingPageDao {
 	private PreparedStatement preparedStatement;
 	private ResultSet resultSet;
 	private static String selectQuery = "select *,"
+			+ "(select r.return_price from return_details r where r.stock_id=s.stock_id and r.return_type=\"D\" and r.Price_Effective_Date=p.Price_Effective_Date) as \"daily_returns\","
 			+ "(select r.return_price from return_details r where r.stock_id=s.stock_id and r.return_type=\"W\" and r.Price_Effective_Date=p.Price_Effective_Date) as \"1_week_return\","
 			+ "(select r.return_price from return_details r where r.stock_id=s.stock_id and r.return_type=\"M\" and r.Price_Effective_Date=p.Price_Effective_Date) as \"1_month_return\", "
 			+ "(select r.return_price from return_details r where r.stock_id=s.stock_id and r.return_type=\"Y\" and r.Price_Effective_Date=p.Price_Effective_Date) as \"1_year_return\" "
@@ -30,7 +31,7 @@ public class LandingPageDao {
 			+ "join industry_details i on s.industry_id=i.industry_id "
 			+ "join instrument_details ins on s.instrument_id=ins.instrument_id "
 			+ "join exchange_details e on s.exchange_id=e.exchange_id "
-			+ "join sector_details sec on s.sector_id=sec.sector_id " + "where price_effective_date=\"2022-03-30\"";
+			+ "join sector_details sec on s.sector_id=sec.sector_id ";
 
 	/**
 	 * Fetches all the records from the landing table and returns list to
@@ -45,7 +46,7 @@ public class LandingPageDao {
 		try {
 			// establishing MySql connections
 			preparedStatement = DbConnection.getObject().getConnection()
-					.prepareStatement(selectQuery + " order by s.stock_id");
+					.prepareStatement(selectQuery + "where price_effective_date=\"2022-03-30\" order by s.stock_id");
 			resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
@@ -164,7 +165,7 @@ public class LandingPageDao {
 	private PreparedStatement searchByOneParameter(String parameter, String column) throws SQLException {
 
 		String temp[] = parameter.split(",");
-		StringBuilder queryBuilder = new StringBuilder(selectQuery);
+		StringBuilder queryBuilder = new StringBuilder(selectQuery + " where price_effective_date=\"2022-03-30\"");
 		queryBuilder.append("and " + column + " in (");
 		for (int i = 0; i < temp.length; i++) {
 			queryBuilder.append("?");
@@ -206,7 +207,7 @@ public class LandingPageDao {
 		int len1 = temp1.length;
 		String temp2[] = parameter2.split(",");
 		int len2 = temp2.length;
-		StringBuilder queryBuilder = new StringBuilder(selectQuery);
+		StringBuilder queryBuilder = new StringBuilder(selectQuery + " where price_effective_date=\"2022-03-30\"");
 		queryBuilder.append("and " + col1 + " in (");
 
 		for (int i = 0; i < len1; i++) {
@@ -259,7 +260,7 @@ public class LandingPageDao {
 		int len2 = temp2.length;
 		int len3 = temp3.length;
 
-		StringBuilder queryBuilder = new StringBuilder(selectQuery);
+		StringBuilder queryBuilder = new StringBuilder(selectQuery + " where price_effective_date=\"2022-03-30\"");
 		queryBuilder.append("and " + col1 + " in (");
 		//
 		for (int i = 0; i < len1; i++) {
@@ -306,22 +307,22 @@ public class LandingPageDao {
 	 * 
 	 * @return list of records based on multiple parameters
 	 */
-	public List<LandingPage> filterByParameters(String industryName, String country, String exchange)
+	public List<LandingPage> filterByParameters(String instrumentName, String country, String exchange)
 			throws SQLException {
 
 		List<LandingPage> list = new ArrayList<LandingPage>();
 
 		// case 1
-		if (!industryName.equalsIgnoreCase("null") && country.equalsIgnoreCase("null")
+		if (!instrumentName.equalsIgnoreCase("null") && country.equalsIgnoreCase("null")
 				&& exchange.equalsIgnoreCase("null")) {
 
-			preparedStatement = searchByOneParameter(industryName, "`INDUSTRY_NAME`");
+			preparedStatement = searchByOneParameter(instrumentName, "`INSTRUMENT_NAME`");
 			System.out.println("1st");
 
 		}
 
 		// case 2
-		else if (industryName.equalsIgnoreCase("null") && !country.equalsIgnoreCase("null")
+		else if (instrumentName.equalsIgnoreCase("null") && !country.equalsIgnoreCase("null")
 				&& exchange.equalsIgnoreCase("null")) {
 
 			preparedStatement = searchByOneParameter(country, "`country_name`");
@@ -330,7 +331,7 @@ public class LandingPageDao {
 		}
 
 		// case 3
-		else if (industryName.equalsIgnoreCase("null") && country.equalsIgnoreCase("null")
+		else if (instrumentName.equalsIgnoreCase("null") && country.equalsIgnoreCase("null")
 				&& !exchange.equalsIgnoreCase("null")) {
 
 			preparedStatement = searchByOneParameter(exchange, "`exchange_code`");
@@ -339,25 +340,25 @@ public class LandingPageDao {
 		}
 
 		// case 4
-		else if (!industryName.equalsIgnoreCase("null") && !country.equalsIgnoreCase("null")
+		else if (!instrumentName.equalsIgnoreCase("null") && !country.equalsIgnoreCase("null")
 				&& exchange.equalsIgnoreCase("null")) {
 
-			preparedStatement = searchByTwoParameter(industryName, country, "`INDUSTRY_NAME`", "`country_name`");
+			preparedStatement = searchByTwoParameter(instrumentName, country, "`INSTRUMENT_NAME`", "`country_name`");
 			System.out.println("4th");
 
 		}
 
 		// case 5
-		else if (!industryName.equalsIgnoreCase("null") && country.equalsIgnoreCase("null")
+		else if (!instrumentName.equalsIgnoreCase("null") && country.equalsIgnoreCase("null")
 				&& !exchange.equalsIgnoreCase("null")) {
 
-			preparedStatement = searchByTwoParameter(industryName, exchange, "`INDUSTRY_NAME`", "`exchange_code`");
+			preparedStatement = searchByTwoParameter(instrumentName, exchange, "`INSTRUMENT_NAME`", "`exchange_code`");
 			System.out.println("5th");
 
 		}
 
 		// case 6
-		else if (industryName.equalsIgnoreCase("null") && !country.equalsIgnoreCase("null")
+		else if (instrumentName.equalsIgnoreCase("null") && !country.equalsIgnoreCase("null")
 				&& !exchange.equalsIgnoreCase("null")) {
 
 			preparedStatement = searchByTwoParameter(country, exchange, "`country_name`", "`exchange_code`");
@@ -366,16 +367,17 @@ public class LandingPageDao {
 		}
 
 		// case 7
-		else if (!industryName.equalsIgnoreCase("null") && !country.equalsIgnoreCase("null")
+		else if (!instrumentName.equalsIgnoreCase("null") && !country.equalsIgnoreCase("null")
 				&& !exchange.equalsIgnoreCase("null")) {
 
-			preparedStatement = searchByAllParameter(industryName, country, exchange, "`INDUSTRY_NAME`",
+			preparedStatement = searchByAllParameter(instrumentName, country, exchange, "`INSTRUMENT_NAME`",
 					"`country_name`", "`exchange_code`");
 			System.out.println("7th");
 
 		}
 
 		// method to return the list
+		System.out.println(preparedStatement);
 		list = viewList(preparedStatement);
 
 		return list;
@@ -437,14 +439,17 @@ public class LandingPageDao {
 	 *
 	 * @return list of unique industry names
 	 */
-	public List<String> getUniqueIndustryNames() {
-		List<String> list = new ArrayList<String>();
+	public List<LandingPage> getUniqueInstrumentNames() {
+		List<LandingPage> list = new ArrayList<LandingPage>();
 		try {
 			preparedStatement = DbConnection.getObject().getConnection().prepareStatement(
-					"select distinct i.industry_name from stock_details s join industry_details i on s.industry_id=i.industry_id");
+					"select distinct s.instrument_name from stock_details s join industry_details i on s.industry_id=i.industry_id");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				list.add(resultSet.getString(1));
+				LandingPage landingPage = new LandingPage();
+
+				landingPage.setIndustryName(resultSet.getString("instrument_name"));
+				list.add(landingPage);
 			}
 		} catch (Exception e) {
 			daologger.debug("Error occured in getIndustryName function " + e);
@@ -458,18 +463,23 @@ public class LandingPageDao {
 	 *
 	 * @return list of unique exchange names
 	 */
-	public List<String> getUniqueExchangeNames() {
-		List<String> list = new ArrayList<String>();
-		String query = "select distinct e.exchange_code from stock_details s join exchange_details e on s.exchange_id=e.exchange_id";
+	public List<LandingPage> getUniqueExchangeNames() {
+		List<LandingPage> list = new ArrayList<LandingPage>();
+
 		try {
-			preparedStatement = DbConnection.getObject().getConnection().prepareStatement(query);
+			preparedStatement = DbConnection.getObject().getConnection().prepareStatement(
+					"select distinct e.exchange_code from stock_details s join exchange_details e on s.exchange_id=e.exchange_id");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				list.add(resultSet.getString(1));
+				LandingPage landingPage = new LandingPage();
+
+				landingPage.setIndustryName(resultSet.getString("exchange_code"));
+				list.add(landingPage);
 			}
-		} catch (SQLException e) {
-			daologger.debug("Error occured in getUniqueExchangeNames function " + e);
+		} catch (Exception e) {
+			daologger.debug("Error occured in getExchangeName function " + e);
 		}
+		// return map;
 		return list;
 	}
 
@@ -478,48 +488,23 @@ public class LandingPageDao {
 	 *
 	 * @return list of unique country names
 	 */
-	public List<String> getUniqueCountryNames() {
-		List<String> list = new ArrayList<String>();
+	public List<LandingPage> getUniqueCountryNames() {
+		List<LandingPage> list = new ArrayList<>();
 		try {
 			preparedStatement = DbConnection.getObject().getConnection().prepareStatement(
 					"select distinct co.country_name from stock_details s join country_details co on s.country_id=co.country_id");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				list.add(resultSet.getString(1));
-			}
-		} catch (SQLException e) {
-			daologger.debug("Error occured in getUniqueCountryNames function " + e);
-		}
-		return list;
-	}
-	
-	// epic 2
-	public List<HistoricalPage> historicalRecordByID(int stock_id) {
-		List<HistoricalPage> list = new ArrayList<HistoricalPage>();
-		try {
-			preparedStatement = DbConnection.getObject().getConnection().prepareStatement(
-					"select *,(select r.return_price from return_details r where r.stock_id=s.stock_id and r.return_type=\"W\" and r.Price_Effective_Date=p.Price_Effective_Date) as \"1_week_return\",(select r.return_price from return_details r where r.stock_id=s.stock_id and r.return_type=\"M\" and r.Price_Effective_Date=p.Price_Effective_Date) as \"1_month_return\", (select r.return_price from return_details r where r.stock_id=s.stock_id and r.return_type=\"Y\" and r.Price_Effective_Date=p.Price_Effective_Date) as \"1_year_return\" from stock_details s join price_details p on s.stock_id=p.stock_id where s.stock_id=? and p.price_effective_date!=\"2022-03-30\"");
-			preparedStatement.setInt(1, stock_id);
-			resultSet = preparedStatement.executeQuery();
-			while (resultSet.next()) {
-				HistoricalPage historicalPage = new HistoricalPage();
-				historicalPage.setStock_id(resultSet.getInt("stock_id"));
-				historicalPage.setDate(resultSet.getString("price_effective_date"));
-				historicalPage.setClosePrice(resultSet.getDouble("close_price"));
-				historicalPage.setDailyTradedVolumne(resultSet.getInt("daily_traded_volumes"));
-				historicalPage.setHighPrice(resultSet.getDouble("high_price"));
-				historicalPage.setLowPrice(resultSet.getDouble("low_price"));
-				historicalPage.setOpenPrice(resultSet.getDouble("open_price"));
-				historicalPage.setMonthReturn(resultSet.getDouble("1_month_return"));
-				historicalPage.setWeekReturn(resultSet.getDouble("1_week_return"));
-				historicalPage.setYearReturn(resultSet.getDouble("1_year_return"));
-				historicalPage.setDailyReturns(resultSet.getDouble("daily_returns"));
-				list.add(historicalPage);
+				LandingPage landingPage = new LandingPage();
+
+				landingPage.setCountryOfExchange(resultSet.getString("country_name"));
+				list.add(landingPage);
 			}
 		} catch (Exception e) {
-			daologger.debug("Error occured in historicalRecordByID Function" + e);
+			daologger.debug("Error occured in getCountryName function " + e);
 		}
 		return list;
 	}
+
 
 }

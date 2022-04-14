@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ey.wamacademy.capstoneapi.model.HistoricalPage;
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
-import com.ey.wamacademy.capstoneapi.services.LandingPageService;
+import com.ey.wamacademy.capstoneapi.services.Services;
 
 // Intercepts incoming get requests
 @RestController
@@ -20,7 +20,7 @@ public class MainController {
 	Logger controllerlogger = LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
-	private LandingPageService service;
+	private Services service;
 
 	/**
 	 * handling get request for fetching all records in landing page table
@@ -49,18 +49,18 @@ public class MainController {
 	 *
 	 * @return list of records falling under drop-down selects
 	 */
-	@GetMapping("/view/{industryName}/{country}/{exchange}")
-	public List<LandingPage> findByParameters(@PathVariable String industryName, @PathVariable String country,
+	@GetMapping("/view/{instrumentName}/{country}/{exchange}")
+	public List<LandingPage> findByParameters(@PathVariable String instrumentName, @PathVariable String country,
 			@PathVariable String exchange) throws SQLException {
 
 		controllerlogger.info("filtering with respect to parameters");
-		if (industryName.equalsIgnoreCase("null") && country.equalsIgnoreCase("null")
+		if (instrumentName.equalsIgnoreCase("null") && country.equalsIgnoreCase("null")
 				&& exchange.equalsIgnoreCase("null")) {
 			System.out.println("this triggered");
 			return service.fetchAllData();
 		}
 
-		return service.searchByParameters(industryName, country, exchange);
+		return service.searchByParameters(instrumentName, country, exchange);
 
 	}
 
@@ -70,7 +70,7 @@ public class MainController {
 	 * @return list of all unique exchange names
 	 */
 	@GetMapping("uniqueexchanges")
-	public List<String> getUniqueExchanges() {
+	public List<LandingPage> getUniqueExchanges() {
 		return service.uniqueExchanges();
 	}
 
@@ -79,9 +79,9 @@ public class MainController {
 	 *
 	 * @return list of all unique instruments values
 	 */
-	@GetMapping("uniqueindustries")
-	public List<String> getUniqueIndustries() {
-		return service.uniqueIndustries();
+	@GetMapping("uniqueinstruments")
+	public List<LandingPage> getUniqueInstruments() {
+		return service.uniqueInstruments();
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class MainController {
 	 * @return list of all unique country names
 	 */
 	@GetMapping("uniquecountries")
-	public List<String> getUniqueCountries() {
+	public List<LandingPage> getUniqueCountries() {
 		return service.uniqueCountries();
 	}
 	

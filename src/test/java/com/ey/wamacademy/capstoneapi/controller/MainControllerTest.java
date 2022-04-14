@@ -1,27 +1,38 @@
+
 package com.ey.wamacademy.capstoneapi.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import com.ey.wamacademy.capstoneapi.model.LandingPage;
-import com.ey.wamacademy.capstoneapi.services.LandingPageService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-// Class for testing MainController class
-@SpringBootTest
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+import com.ey.wamacademy.capstoneapi.model.LandingPage;
+import com.ey.wamacademy.capstoneapi.services.Services;
+
+@WebMvcTest(value = MainController.class)
 class MainControllerTest {
 
 	@Autowired
-	private MainController controller;
+	private MockMvc mockMvc;
 
-	// Creating mock object for LandingPageService class
+	@Autowired
+	private MainController mainController;
+
 	@MockBean
-	private LandingPageService landingPageService;
+	private Services mockServices;
 
 	// Creating records for testing viewAll method of LandingPageService class
 	@SuppressWarnings("serial")
@@ -38,13 +49,17 @@ class MainControllerTest {
 		}
 	};
 
-	// Creating lists for testing getUniqueExchanges ,getUniqueInstruments,
-	// getUniqueCountries for testing MainController class
-	List<String> countries = Arrays.asList("United States of America", "Belgium", "Australia", "Canada", "India",
-			"China");
-	List<String> exchanges = Arrays.asList("NYSE", "TSX", "NASDAQ", "SSE");
-	List<String> industries = Arrays.asList("Brookfield Asset Management Ord Shs Class A", "CME Group Ord Shs Class A",
-			"UBS Group Ord Shs", "Moody's Ord Shs", "BSE Ord Shs");
+	@Test
+	void testViewAll() throws Exception {
+		List<LandingPage> mockLandingList = new ArrayList<LandingPage>();
+		LandingPage land = new LandingPage();
+		land.setClosePrice(4d);
+		mockLandingList.add(land);
+		Mockito.when(mockServices.fetchAllData()).thenReturn(mockLandingList);
+		MvcResult mvcResult = this.mockMvc.perform(get("/viewall").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn();
+		assertTrue(mvcResult.getResponse().getContentAsString().contains("4.0"));
+	}
 
 	/**
 	 * Testing viewAll by verifying the number of records fetched
@@ -52,27 +67,8 @@ class MainControllerTest {
 	@Test
 	void viewAllTest() {
 
-		when(landingPageService.fetchAllData()).thenReturn(records);
-		assertEquals(2, controller.viewAll().size());
+		when(mockServices.fetchAllData()).thenReturn(records);
+		assertEquals(2, mainController.viewAll().size());
 
 	}
-
-	@Test
-	void getUniqueExchangesTest() {
-		when(landingPageService.uniqueExchanges()).thenReturn(exchanges);
-		assertEquals(4, controller.getUniqueExchanges().size());
-	}
-
-	@Test
-	void getUniqueCountriesTest() {
-		when(landingPageService.uniqueCountries()).thenReturn(countries);
-		assertEquals(6, controller.getUniqueCountries().size());
-	}
-
-	@Test
-	void getUniqueInstrumentsTest() {
-		when(landingPageService.uniqueIndustries()).thenReturn(industries);
-		assertEquals(5, controller.getUniqueIndustries().size());
-	}
-
 }

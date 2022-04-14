@@ -2,7 +2,6 @@ package com.ey.wamacademy.capstoneapi.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,25 +86,6 @@ public class LandingPageDao {
 		return list;
 	}
 
-	/**
-	 * Returns column count of the fetched data
-	 *
-	 * @return number of columns present in the landing database
-	 */
-	public int getColumnCount() {
-		int columnCount = 0;
-		try {
-			preparedStatement = DbConnection.getObject().getConnection().prepareStatement(selectQuery);
-			resultSet = preparedStatement.executeQuery();
-			ResultSetMetaData rsmd = resultSet.getMetaData();
-			columnCount = rsmd.getColumnCount();
-		} catch (Exception e) {
-			daologger.debug("Error occured in getColumnCount function " + e);
-		}
-
-		return columnCount;
-
-	}
 
 	/**
 	 * Searches record by stock_id , was implemented for testing
@@ -300,8 +280,7 @@ public class LandingPageDao {
 	/**
 	 * implements multiple selection drop-down feature
 	 *
-	 * @param industryName, String of comma-separated selections for industry
-	 *                      parameter
+	 * @param industryName, String of comma-separated selections for industry parameter
 	 * @Param country, String of comma-separated selections for country parameter
 	 * @Param exchange, String of comma-separated selections for exchange parameter
 	 * 
@@ -439,17 +418,15 @@ public class LandingPageDao {
 	 *
 	 * @return list of unique industry names
 	 */
-	public List<LandingPage> getUniqueInstrumentNames() {
-		List<LandingPage> list = new ArrayList<LandingPage>();
+	public List<String> getUniqueInstrumentNames() {
+		List<String> list = new ArrayList<String>();
 		try {
 			preparedStatement = DbConnection.getObject().getConnection().prepareStatement(
 					"select distinct s.instrument_name from stock_details s join industry_details i on s.industry_id=i.industry_id");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				LandingPage landingPage = new LandingPage();
 
-				landingPage.setIndustryName(resultSet.getString("instrument_name"));
-				list.add(landingPage);
+				list.add(resultSet.getString(1));
 			}
 		} catch (Exception e) {
 			daologger.debug("Error occured in getIndustryName function " + e);
@@ -463,23 +440,18 @@ public class LandingPageDao {
 	 *
 	 * @return list of unique exchange names
 	 */
-	public List<LandingPage> getUniqueExchangeNames() {
-		List<LandingPage> list = new ArrayList<LandingPage>();
-
+	public List<String> getUniqueExchangeNames() {
+		List<String> list = new ArrayList<String>();
+		String query = "select distinct e.exchange_code from stock_details s join exchange_details e on s.exchange_id=e.exchange_id";
 		try {
-			preparedStatement = DbConnection.getObject().getConnection().prepareStatement(
-					"select distinct e.exchange_code from stock_details s join exchange_details e on s.exchange_id=e.exchange_id");
+			preparedStatement = DbConnection.getObject().getConnection().prepareStatement(query);
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				LandingPage landingPage = new LandingPage();
-
-				landingPage.setIndustryName(resultSet.getString("exchange_code"));
-				list.add(landingPage);
+				list.add(resultSet.getString(1));
 			}
-		} catch (Exception e) {
-			daologger.debug("Error occured in getExchangeName function " + e);
+		} catch (SQLException e) {
+			daologger.debug("Error occured in getUniqueExchangeNames function " + e);
 		}
-		// return map;
 		return list;
 	}
 
@@ -488,23 +460,19 @@ public class LandingPageDao {
 	 *
 	 * @return list of unique country names
 	 */
-	public List<LandingPage> getUniqueCountryNames() {
-		List<LandingPage> list = new ArrayList<>();
+	public List<String> getUniqueCountryNames() {
+		List<String> list = new ArrayList<String>();
 		try {
 			preparedStatement = DbConnection.getObject().getConnection().prepareStatement(
 					"select distinct co.country_name from stock_details s join country_details co on s.country_id=co.country_id");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				LandingPage landingPage = new LandingPage();
-
-				landingPage.setCountryOfExchange(resultSet.getString("country_name"));
-				list.add(landingPage);
+				list.add(resultSet.getString(1));
 			}
-		} catch (Exception e) {
-			daologger.debug("Error occured in getCountryName function " + e);
+		} catch (SQLException e) {
+			daologger.debug("Error occured in getUniqueCountryNames function " + e);
 		}
 		return list;
 	}
-
 
 }

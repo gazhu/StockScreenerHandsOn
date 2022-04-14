@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ey.wamacademy.capstoneapi.model.HistoricalPage;
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
-import com.ey.wamacademy.capstoneapi.services.Services;
+import com.ey.wamacademy.capstoneapi.services.HistoricalPageService;
+import com.ey.wamacademy.capstoneapi.services.LandingPageService;
 
 // Intercepts incoming get requests
 @RestController
@@ -20,7 +21,12 @@ public class MainController {
 	Logger controllerlogger = LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
-	private Services service;
+	private LandingPageService landingPageService;
+	
+	@Autowired
+	private HistoricalPageService historicalService;
+	
+	
 
 	/**
 	 * handling get request for fetching all records in landing page table
@@ -31,7 +37,7 @@ public class MainController {
 	public List<LandingPage> viewAll() {
 
 		controllerlogger.info("Inside View All Method");
-		List<LandingPage> records = service.fetchAllData();
+		List<LandingPage> records = landingPageService.fetchAllData();
 
 		// logging the trace if records are fetched successfully
 		if (records.size() != 0) {
@@ -57,10 +63,10 @@ public class MainController {
 		if (instrumentName.equalsIgnoreCase("null") && country.equalsIgnoreCase("null")
 				&& exchange.equalsIgnoreCase("null")) {
 			System.out.println("this triggered");
-			return service.fetchAllData();
+			return landingPageService.fetchAllData();
 		}
 
-		return service.searchByParameters(instrumentName, country, exchange);
+		return landingPageService.searchByParameters(instrumentName, country, exchange);
 
 	}
 
@@ -70,8 +76,8 @@ public class MainController {
 	 * @return list of all unique exchange names
 	 */
 	@GetMapping("uniqueexchanges")
-	public List<LandingPage> getUniqueExchanges() {
-		return service.uniqueExchanges();
+	public List<String> getUniqueExchanges() {
+		return landingPageService.uniqueExchanges();
 	}
 
 	/**
@@ -80,8 +86,8 @@ public class MainController {
 	 * @return list of all unique instruments values
 	 */
 	@GetMapping("uniqueinstruments")
-	public List<LandingPage> getUniqueInstruments() {
-		return service.uniqueInstruments();
+	public List<String> getUniqueInstruments() {
+		return landingPageService.uniqueInstruments();
 	}
 
 	/**
@@ -90,14 +96,19 @@ public class MainController {
 	 * @return list of all unique country names
 	 */
 	@GetMapping("uniquecountries")
-	public List<LandingPage> getUniqueCountries() {
-		return service.uniqueCountries();
+	public List<String> getUniqueCountries() {
+		return landingPageService.uniqueCountries();
 	}
 	
+	/**
+	 * handling get request for fetching historical records of specific stock_id
+	 *
+	 * @return List of records with specific stock_id for each day expect current day
+	 */
 	@GetMapping("/historical/{stock_id}")
 	public List<HistoricalPage> getHistoricalData(@PathVariable int stock_id) throws SQLException
 	{
-		return service.getByStockId(stock_id);
+		return historicalService.getByStockId(stock_id);
 	}
 
 }

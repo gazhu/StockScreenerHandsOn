@@ -35,6 +35,7 @@ public class HistoricalPage {
 	public HistoricalPage() {
 	}
 
+	// Getters and Setters
 	public int getStock_id() {
 		return stock_id;
 	}

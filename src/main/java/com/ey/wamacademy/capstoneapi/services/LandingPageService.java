@@ -3,23 +3,20 @@ package com.ey.wamacademy.capstoneapi.services;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ey.wamacademy.capstoneapi.dao.HistoricalPageDao;
 import com.ey.wamacademy.capstoneapi.dao.LandingPageDao;
-import com.ey.wamacademy.capstoneapi.model.HistoricalPage;
 import com.ey.wamacademy.capstoneapi.model.LandingPage;
 
 // Service class for calling LandingPageDao methods and returning results to controller
 @Service
-public class Services {
+public class LandingPageService {
 
 	@Autowired
 	private LandingPageDao landingPageDao;
 
-	@Autowired
-	private HistoricalPageDao historicalPageDao;
 
 	/**
 	 * method for fetching all records by calling LandingPageDao's method
@@ -52,7 +49,7 @@ public class Services {
 	 *
 	 * @return list of unique exchange names
 	 */
-	public List<LandingPage> uniqueExchanges() {
+	public List<String> uniqueExchanges() {
 		return landingPageDao.getUniqueExchangeNames();
 	}
 
@@ -61,7 +58,7 @@ public class Services {
 	 *
 	 * @return list of unique industry names
 	 */
-	public List<LandingPage> uniqueInstruments() {
+	public List<String> uniqueInstruments() {
 		return landingPageDao.getUniqueInstrumentNames();
 	}
 
@@ -70,12 +67,8 @@ public class Services {
 	 *
 	 * @return list of unique country names
 	 */
-	public List<LandingPage> uniqueCountries() {
+	public List<String> uniqueCountries() {
 		return landingPageDao.getUniqueCountryNames();
-	}
-
-	public List<HistoricalPage> getByStockId(int stock_id) {
-		return historicalPageDao.historicalRecordByID(stock_id);
 	}
 
 }

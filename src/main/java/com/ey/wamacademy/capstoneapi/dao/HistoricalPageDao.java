@@ -12,12 +12,14 @@ import org.springframework.stereotype.Component;
 
 import com.ey.wamacademy.capstoneapi.model.HistoricalPage;
 
+// HistoricalPageDao includes the methods that perform business logics and return data to HistoricalPageService class 
 @Component
 public class HistoricalPageDao {
 
 	private Logger daologger = LoggerFactory.getLogger(LandingPageDao.class);
 	private PreparedStatement preparedStatement;
 	private ResultSet resultSet;
+	// select query
 	private static String selectQuery = "select *,"
 			+ "(select r.return_price from return_details r where r.stock_id=s.stock_id and r.return_type=\"D\" and r.Price_Effective_Date=p.Price_Effective_Date) as \"daily_returns\","
 			+ "(select r.return_price from return_details r where r.stock_id=s.stock_id and r.return_type=\"W\" and r.Price_Effective_Date=p.Price_Effective_Date) as \"1_week_return\","
@@ -31,6 +33,11 @@ public class HistoricalPageDao {
 			+ "join exchange_details e on s.exchange_id=e.exchange_id "
 			+ "join sector_details sec on s.sector_id=sec.sector_id ";
 
+	/**
+	 * finds a stock using stock_id and returns its historical data
+	 *
+	 * @return List of records with specific stock_id for each day expect current day
+	 */
 	public List<HistoricalPage> historicalRecordByID(int stock_id) {
 		List<HistoricalPage> list = new ArrayList<HistoricalPage>();
 		try {

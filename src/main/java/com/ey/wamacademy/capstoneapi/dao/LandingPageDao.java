@@ -73,7 +73,7 @@ public class LandingPageDao {
 				landingPage.setEarningsPerShare(resultSet.getDouble("earnings_per_share"));
 				landingPage.setPe(resultSet.getDouble("p_e"));
 				landingPage.setCountryOfExchange(resultSet.getString("country_name"));
-				landingPage.setExchangeName(resultSet.getString("Exchange_name"));
+				landingPage.setExchangeName(resultSet.getString("exchange_code"));
 				landingPage.setSectorName(resultSet.getString("sector_name"));
 				landingPage.setIndustryName(resultSet.getString("industry_name"));
 				landingPage.setInstrumentType(resultSet.getString("instrument_types"));
